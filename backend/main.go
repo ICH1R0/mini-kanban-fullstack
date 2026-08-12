@@ -14,7 +14,7 @@ type Task struct {
 }
 
 var tasks = []Task{
-	{ID: 1, Title: "Estudo GO", Status: "todo"},
+	{ID: 1, Title: "Estudo GO", Status: "to-do"},
 	{ID: 2, Title: "Criar API", Status: "in_progress"},
 }
 
