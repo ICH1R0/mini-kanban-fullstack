@@ -70,12 +70,25 @@ func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r* http.Request){
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
-	http.HandleFunc("/", helloHandler)
-	http.HandleFunc("GET /tasks", getTaskHandler)
-	http.HandleFunc("POST /tasks", createTaskHandler)
-	http.HandleFunc("PATCH /tasks/{id}", updateTaskHandler)
-	http.HandleFunc("DELETE /tasks/{id}", deleteTaskHandler)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", helloHandler)
+	mux.HandleFunc("GET /tasks", getTaskHandler)
+	mux.HandleFunc("POST /tasks", createTaskHandler)
+	mux.HandleFunc("PATCH /tasks/{id}", updateTaskHandler)
+	mux.HandleFunc("DELETE /tasks/{id}", deleteTaskHandler)
+
 	fmt.Println("Servidor rodando em http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", enableCORS(mux))
 }
