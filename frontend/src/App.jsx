@@ -27,7 +27,17 @@ function App(){
       .then(createdTask => {
         setTasks([...tasks, createdTask]);
         setNewTask('');
-      })
+      });
+  }
+
+  function handleDeleteTask(id){
+    fetch(`http://localhost:8080/tasks/${id}`, {
+      method: 'DELETE'
+    })
+
+      .then(() => {
+        setTasks(tasks.filter(tasks => tasks.id !== id))
+      });
   }
 
     return(
@@ -43,9 +53,9 @@ function App(){
           <button onClick={hadlerCreateTask}>Adicionar!</button>
         </div>
 
-        <Column title="To-do" tasks={tasks.filter(task => task.status === 'to-do')}/>
-        <Column title="Em progresso" tasks={tasks.filter(task => task.status === 'in_progress')}/>
-        <Column title="Concluído" tasks={tasks.filter(task => task.status === 'done')}/>
+        <Column title="To-do" tasks={tasks.filter(task => task.status === 'to-do')} onDelete={handleDeleteTask}/>
+        <Column title="Em progresso" tasks={tasks.filter(task => task.status === 'in_progress')} onDelete={handleDeleteTask}/>
+        <Column title="Concluído" tasks={tasks.filter(task => task.status === 'done')} onDelete={handleDeleteTask}/>
 
       </div>
     );
