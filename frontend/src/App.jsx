@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { DndContext } from '@dnd-kit/core';
 import Column from './components/Column';
 import './App.css';
 
@@ -40,8 +41,27 @@ function App(){
       });
   }
 
-    return(
+  function handleDragEnd (event) {
+    const { active, over } = event;
 
+    if (!over) return;
+
+    const taskId = active.id;
+    const newStatus = over.id;
+
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, status: newStatus } : task
+    ));
+
+    fetch(`http://localhost:8080/tasks/${taskId}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status: newStatus })
+    })
+  }
+
+    return(
+      <DndContext onDragEnd={handleDragEnd}>
       <div className='board'>
 
         <div>
@@ -53,11 +73,12 @@ function App(){
           <button onClick={hadlerCreateTask}>Adicionar!</button>
         </div>
 
-        <Column title="To-do" tasks={tasks.filter(task => task.status === 'to-do')} onDelete={handleDeleteTask}/>
-        <Column title="Em progresso" tasks={tasks.filter(task => task.status === 'in_progress')} onDelete={handleDeleteTask}/>
-        <Column title="Concluído" tasks={tasks.filter(task => task.status === 'done')} onDelete={handleDeleteTask}/>
+        <Column title="To-do" status="to-do" tasks={tasks.filter(task => task.status === 'to-do')} onDelete={handleDeleteTask} />
+        <Column title="Em progresso" status="in_progress" tasks={tasks.filter(task => task.status === 'in_progress')} onDelete={handleDeleteTask}/>
+        <Column title="Concluído" status="done" tasks={tasks.filter(task => task.status === 'done')} onDelete={handleDeleteTask}/>
 
       </div>
+      </DndContext>
     );
 }
 
