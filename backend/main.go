@@ -49,12 +49,21 @@ func updateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&updateData)
 
 	for i, task := range tasks {
+
 		if task.ID == id {
-			tasks[i].Status = updateData.Status
+
+			if updateData.Title != "" {
+				tasks[i].Title = updateData.Title
+			}
+			if updateData.Status != "" {
+				tasks[i].Status = updateData.Status
+			}
+
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(tasks[i])
 		}
 	}
+	
 }
 
 func deleteTaskHandler(w http.ResponseWriter, r *http.Request) {

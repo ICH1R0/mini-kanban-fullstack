@@ -43,9 +43,7 @@ function App(){
 
   function handleDragEnd (event) {
     const { active, over } = event;
-
     if (!over) return;
-
     const taskId = active.id;
     const newStatus = over.id;
 
@@ -60,6 +58,18 @@ function App(){
     })
   }
 
+  function handleEditTask(id, newTitle) {
+	setTasks(tasks.map(task =>
+		task.id === id ? { ...task, title: newTitle } : task
+	));
+
+	fetch(`http://localhost:8080/tasks/${id}`, {
+		method: 'PATCH',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ title: newTitle })
+	});
+}
+
     return(
       <DndContext onDragEnd={handleDragEnd}>
       <div className='board'>
@@ -73,9 +83,9 @@ function App(){
           <button onClick={hadlerCreateTask}>Adicionar!</button>
         </div>
 
-        <Column title="To-do" status="to-do" tasks={tasks.filter(task => task.status === 'to-do')} onDelete={handleDeleteTask} />
-        <Column title="Em progresso" status="in_progress" tasks={tasks.filter(task => task.status === 'in_progress')} onDelete={handleDeleteTask}/>
-        <Column title="Concluído" status="done" tasks={tasks.filter(task => task.status === 'done')} onDelete={handleDeleteTask}/>
+        <Column title="To-do" status="to-do" tasks={tasks.filter(task => task.status === 'to-do')} onEdit = {handleEditTask} onDelete={handleDeleteTask} />
+        <Column title="Em progresso" status="in_progress" tasks={tasks.filter(task => task.status === 'in_progress')} onEdit = {handleEditTask} onDelete={handleDeleteTask}/>
+        <Column title="Concluído" status="done" tasks={tasks.filter(task => task.status === 'done')} onEdit = {handleEditTask} onDelete={handleDeleteTask}/>
 
       </div>
       </DndContext>
