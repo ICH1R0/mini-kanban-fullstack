@@ -18,6 +18,8 @@ var tasks = []Task{
 	{ID: 2, Title: "Criar API", Status: "in_progress"},
 }
 
+var nextID = 3
+
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello kanban")
 }
@@ -33,7 +35,8 @@ func createTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var newTask Task
 	json.NewDecoder(r.Body).Decode(&newTask)
 
-	newTask.ID = len(tasks) + 1
+	newTask.ID = nextID
+	nextID++
 	tasks = append(tasks, newTask)
 
 	w.Header().Set("Content-Type", "application/json")

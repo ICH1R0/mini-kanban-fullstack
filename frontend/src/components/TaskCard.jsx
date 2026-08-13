@@ -32,12 +32,13 @@ function TaskCard({ task, onDelete, onEdit }) {
 		) : (
 			<p onClick={() => setIsEditing(true)}>{task.title}</p>
 		)}
+        <div className="task-actions">
+			{isEditing && (
+				<button onClick={handleSave}>Salvar</button>
+			)}
 
-		{isEditing && (
-			<button onClick={handleSave}>Salvar</button>
-		)}
-
-		<button onClick={() => onDelete(task.id)}>Excluir</button>
+			<button onClick={() => onDelete(task.id)}>Excluir</button>
+        </div>
 	</div>
 );
 }

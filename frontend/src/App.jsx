@@ -74,7 +74,7 @@ function App(){
       <DndContext onDragEnd={handleDragEnd}>
       <div className='board'>
 
-        <div>
+        <div className="new-task-form">
           <input
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
