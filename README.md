@@ -81,3 +81,6 @@ As tarefas recebem IDs através de um contador incremental (`nextID`), garantind
 ## Fluxo de dados no frontend
 
 O estado das tarefas vive centralizado no componente `App`, que busca os dados do backend e distribui via *props* para os componentes filhos (`Column` → `TaskCard`), seguindo o fluxo unidirecional característico do React. Ações do usuário (criar, editar, excluir, mover) dependem de funções também definidas em `App` e passadas como props, garantindo que só o componente "dono" do estado o modifique diretamente.
+
+## Diagrama de User Flow
+ ![User Flow do Kanban](./user-flow.png)
